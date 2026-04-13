@@ -60,8 +60,7 @@ label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-wei
 .method-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
 .mtab{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border2);color:var(--muted);background:var(--bg3);transition:all .15s}
 .mtab.active{background:var(--blue-bg);color:var(--accent);border-color:rgba(79,142,247,.3)}
-.progress-wrap{margin:12px 0}
-.progress-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.progress-wrap{margin:12px 0}.progress-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
 .progress-label{font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
 .sites-table{width:100%;border-collapse:collapse}
@@ -73,10 +72,10 @@ label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-wei
 .site-type{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;font-family:var(--mono)}
 .type-domain{background:rgba(251,191,36,.12);color:var(--amber)}.type-url{background:var(--blue-bg);color:var(--accent)}
 .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;font-family:var(--mono)}
-.s-pending{background:var(--bg4);color:var(--muted)}.s-running{background:var(--blue-bg);color:var(--accent)}.s-ok{background:var(--green-bg);color:var(--green)}.s-error{background:var(--red-bg);color:var(--red)}.s-skip{background:var(--amber-bg);color:var(--amber)}
+.s-pending{background:var(--bg4);color:var(--muted)}.s-running{background:var(--blue-bg);color:var(--accent)}
+.s-ok{background:var(--green-bg);color:var(--green)}.s-error{background:var(--red-bg);color:var(--red)}.s-skip{background:var(--amber-bg);color:var(--amber)}
 .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.dot.pulse{animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.pulse{animation:pulse 1s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .log-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:12px;max-height:220px;overflow-y:auto;line-height:1.8}
 .log-line{color:var(--muted)}.log-ok{color:var(--green)}.log-err{color:var(--red)}.log-info{color:var(--accent)}.log-warn{color:var(--amber)}
 .config-section{margin-bottom:24px}
@@ -99,11 +98,11 @@ label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-wei
 .history-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
 .history-row:last-child{border-bottom:none}
 .history-meta{font-size:11px;color:var(--muted);font-family:var(--mono)}
-.empty{text-align:center;padding:40px;color:var(--muted)}
-.empty-icon{font-size:32px;margin-bottom:10px}.empty-text{font-size:14px}
+.empty{text-align:center;padding:40px;color:var(--muted)}.empty-icon{font-size:32px;margin-bottom:10px}.empty-text{font-size:14px}
 .google-btn{width:100%;padding:10px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
 .google-btn:hover{border-color:var(--accent);background:var(--bg4)}
 .code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12px;color:var(--accent);overflow-x:auto;margin:10px 0;line-height:1.7}
+.code-block .comment{color:var(--muted)}.code-block .key{color:var(--amber)}.code-block .val{color:var(--green)}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 @media(max-width:768px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:static}.stats-row{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}}
 </style>
@@ -118,25 +117,25 @@ label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-wei
 </div>
 <nav class="nav">
 <div class="nav-label">Chính</div>
-<button class="nav-item active" id="nav-connect" onclick="showPanel('connect',this)"><span class="icon">⚡</span> Kết nối hàng loạt<span class="count" id="nav-count">0</span></button>
-<button class="nav-item" id="nav-results" onclick="showPanel('results',this)"><span class="icon">📋</span> Kết quả<span class="count" id="nav-ok-count">0</span></button>
-<button class="nav-item" id="nav-history" onclick="showPanel('history',this)"><span class="icon">🕒</span> Lịch sử</button>
+<button class="nav-item active" data-panel="connect"><span class="icon">⚡</span> Kết nối hàng loạt<span class="count" id="nav-count">0</span></button>
+<button class="nav-item" data-panel="results"><span class="icon">📋</span> Kết quả<span class="count" id="nav-ok-count">0</span></button>
+<button class="nav-item" data-panel="history"><span class="icon">🕒</span> Lịch sử</button>
 <div class="nav-label">Cài đặt</div>
-<button class="nav-item" id="nav-config" onclick="showPanel('config',this)"><span class="icon">⚙️</span> Cấu hình</button>
-<button class="nav-item" id="nav-guide" onclick="showPanel('guide',this)"><span class="icon">📖</span> Hướng dẫn</button>
+<button class="nav-item" data-panel="config"><span class="icon">⚙️</span> Cấu hình</button>
+<button class="nav-item" data-panel="guide"><span class="icon">📖</span> Hướng dẫn</button>
 </nav>
 <div class="sidebar-footer">
 <div class="auth-widget">
 <div id="auth-out">
 <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Đăng nhập để bắt đầu</div>
-<button class="google-btn" onclick="signIn()">
+<button class="google-btn" id="sign-in-btn">
 <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
 Đăng nhập với Google
 </button>
 </div>
 <div id="auth-in" style="display:none">
 <div class="auth-info"><div class="auth-avatar" id="auth-av">U</div><div><div class="auth-name" id="auth-nm">User</div><div class="auth-email" id="auth-em"></div></div></div>
-<button class="auth-btn connected" onclick="signOut()">✓ Đã kết nối · Đăng xuất</button>
+<button class="auth-btn connected" id="sign-out-btn">✓ Đã kết nối · Đăng xuất</button>
 </div>
 </div>
 </div>
@@ -151,409 +150,300 @@ label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-wei
 <div class="stat s-pct"><div class="stat-val" id="st-pct">–</div><div class="stat-key">Tỷ lệ</div></div>
 </div>
 <div class="card">
-<div class="card-header"><span class="card-title">Danh sách websites</span><div class="btn-row"><button class="btn btn-ghost" onclick="loadDemo()">Thêm mẫu</button><button class="btn btn-ghost" onclick="clearAll()">Xoá</button></div></div>
-<div class="field"><label>Nhập mỗi URL trên một dòng — hỗ trợ URL prefix và Domain property</label>
-<textarea id="url-input" rows="7" placeholder="https://example.com&#10;https://blog.mysite.vn&#10;sc-domain:mystore.com&#10;https://shop.example.net" oninput="onUrlInput()"></textarea></div>
-<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted);font-family:var(--mono)" id="url-hint">0 URLs · 0 domain · 0 URL prefix</span><button class="btn btn-primary" onclick="parseAndShow()" id="parse-btn" disabled>Phân tích URLs →</button></div>
+<div class="card-header"><span class="card-title">Danh sách websites</span><div class="btn-row"><button class="btn btn-ghost" id="demo-btn">Thêm mẫu</button><button class="btn btn-ghost" id="clear-btn">Xoá</button></div></div>
+<div class="field"><label>Nhập mỗi URL trên một dòng — hỗ trợ URL prefix và Domain property</label><textarea id="url-input" rows="7" placeholder="https://example.com&#10;https://blog.mysite.vn&#10;sc-domain:mystore.com&#10;https://shop.example.net"></textarea></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted);font-family:var(--mono)" id="url-hint">0 URLs</span><button class="btn btn-primary" id="parse-btn" disabled>Phân tích URLs →</button></div>
 </div>
 <div class="card">
 <div class="card-header"><span class="card-title">Phương thức xác minh</span></div>
 <div class="method-tabs">
-<div class="mtab active" onclick="selMethod(this,'dns')">DNS TXT Record</div>
-<div class="mtab" onclick="selMethod(this,'html')">HTML File</div>
-<div class="mtab" onclick="selMethod(this,'meta')">Meta Tag</div>
-<div class="mtab" onclick="selMethod(this,'ga')">Google Analytics</div>
-<div class="mtab" onclick="selMethod(this,'gtm')">Google Tag Manager</div>
+<div class="mtab active" data-method="dns">DNS TXT Record</div>
+<div class="mtab" data-method="html">HTML File</div>
+<div class="mtab" data-method="meta">Meta Tag</div>
+<div class="mtab" data-method="ga">Google Analytics</div>
+<div class="mtab" data-method="gtm">Google Tag Manager</div>
 </div>
-<div id="m-dns"><div style="font-size:12px;color:var(--muted);line-height:1.7">Thêm bản ghi TXT vào DNS. Chỉ dùng với <span style="color:var(--amber)">sc-domain:</span> property. GSC sẽ trả về token sau khi submit.</div></div>
-<div id="m-html" style="display:none"><div style="font-size:12px;color:var(--muted)">Upload file HTML xác minh vào thư mục gốc website. Chỉ dùng với URL prefix property.</div></div>
-<div id="m-meta" style="display:none"><div style="font-size:12px;color:var(--muted)">Chèn meta tag vào &lt;head&gt; trang chủ. Cần quyền chỉnh sửa HTML.</div></div>
-<div id="m-ga" style="display:none"><div style="font-size:12px;color:var(--muted)">Dùng tài khoản Google Analytics đã liên kết cùng Google Account.</div></div>
+<div id="m-dns"><div style="font-size:12px;color:var(--muted);line-height:1.7">Thêm bản ghi TXT vào DNS. Chỉ dùng với <span style="color:var(--amber)">sc-domain:</span> property.</div></div>
+<div id="m-html" style="display:none"><div style="font-size:12px;color:var(--muted)">Upload file HTML xác minh vào thư mục gốc website.</div></div>
+<div id="m-meta" style="display:none"><div style="font-size:12px;color:var(--muted)">Chèn meta tag vào &lt;head&gt; trang chủ.</div></div>
+<div id="m-ga" style="display:none"><div style="font-size:12px;color:var(--muted)">Dùng tài khoản Google Analytics đã liên kết.</div></div>
 <div id="m-gtm" style="display:none"><div class="field"><label>GTM Container ID</label><input type="text" id="gtm-id" placeholder="GTM-XXXXXXX"></div></div>
 </div>
 <div class="card" id="sites-card" style="display:none">
-<div class="card-header"><span class="card-title">Danh sách xử lý</span><div class="btn-row"><button class="btn btn-danger" id="stop-btn" onclick="stopProcess()" style="display:none">⏹ Dừng</button><button class="btn btn-primary" id="start-btn" onclick="startProcess()">▶ Bắt đầu</button></div></div>
+<div class="card-header"><span class="card-title">Danh sách xử lý</span><div class="btn-row"><button class="btn btn-danger" id="stop-btn" style="display:none">⏹ Dừng</button><button class="btn btn-primary" id="start-btn">▶ Bắt đầu</button></div></div>
 <div class="progress-wrap" id="progress-wrap" style="display:none"><div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div><div class="progress-label" id="prog-label">Chờ...</div></div>
 <div style="overflow-x:auto"><table class="sites-table"><thead><tr><th>#</th><th>Website</th><th>Loại</th><th>Trạng thái</th><th>Ghi chú</th></tr></thead><tbody id="sites-tbody"></tbody></table></div>
 </div>
 <div class="card" id="log-card" style="display:none">
-<div class="card-header"><span class="card-title">Activity Log</span><button class="btn btn-ghost" onclick="clearLog()" style="padding:5px 12px;font-size:11px">Xoá</button></div>
+<div class="card-header"><span class="card-title">Activity Log</span><button class="btn btn-ghost" id="clear-log-btn" style="padding:5px 12px;font-size:11px">Xoá</button></div>
 <div class="log-box" id="log-box"></div>
 </div>
 </div>
 <div class="panel" id="panel-results">
 <div class="page-header"><div class="page-title">Kết quả</div><div class="page-sub">Chi tiết từng website sau khi xử lý</div></div>
 <div class="card">
-<div class="card-header"><span class="card-title">Báo cáo</span><div class="btn-row"><button class="btn btn-ghost" onclick="exportCSV()">↓ Export CSV</button><button class="btn btn-ghost" onclick="copyResults()">⎘ Copy</button></div></div>
+<div class="card-header"><span class="card-title">Báo cáo</span><div class="btn-row"><button class="btn btn-ghost" id="export-btn">↓ Export CSV</button><button class="btn btn-ghost" id="copy-btn">⎘ Copy</button></div></div>
 <div id="results-content"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có kết quả. Chạy kết nối trước.</div></div></div>
 </div>
 </div>
 <div class="panel" id="panel-history">
 <div class="page-header"><div class="page-title">Lịch sử</div><div class="page-sub">Các lần chạy trước đó</div></div>
-<div class="card"><div class="card-header"><span class="card-title">Lịch sử chạy</span><button class="btn btn-ghost" onclick="clearHistory()">Xoá tất cả</button></div><div id="history-list"><div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div></div></div>
+<div class="card"><div class="card-header"><span class="card-title">Lịch sử chạy</span><button class="btn btn-ghost" id="clear-history-btn">Xoá tất cả</button></div><div id="history-list"><div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div></div></div>
 </div>
 <div class="panel" id="panel-config">
 <div class="page-header"><div class="page-title">Cấu hình</div><div class="page-sub">Cài đặt OAuth và hành vi của tool</div></div>
 <div class="card">
 <div class="config-section">
 <div class="config-title">Google OAuth 2.0</div>
-<div class="field"><label>Client ID (từ Google Cloud Console)</label><input type="text" id="cfg-cid" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" oninput="saveConfig()"></div>
+<div class="field"><label>Client ID (từ Google Cloud Console)</label><input type="text" id="cfg-cid" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com"></div>
 <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Xem hướng dẫn lấy Client ID ở tab <strong>Hướng dẫn</strong></div>
-<div class="field"><label>Redirect URI — thêm vào Google Cloud Console</label><div class="code-block" id="redir-uri" style="cursor:pointer" onclick="copyRedir()">https://your-username.github.io/gsc-bulk-connect/</div></div>
+<div class="field"><label>Redirect URI (thêm vào Google Cloud Console)</label><div class="code-block" id="redir-uri" style="cursor:pointer" title="Click để copy">https://your-username.github.io/gsc-bulk-connect/</div></div>
 </div>
 <div class="config-section">
 <div class="config-title">Hành vi</div>
-<div class="config-row"><div><div class="config-label">Delay giữa requests</div><div class="config-desc">Tránh rate limit GSC API (~200 req/100s)</div></div><div style="display:flex;align-items:center;gap:10px"><input type="text" id="cfg-delay" value="500" style="width:70px;text-align:center" oninput="saveConfig()"><span style="font-size:12px;color:var(--muted)">ms</span></div></div>
-<div class="config-row"><div><div class="config-label">Auto retry khi lỗi</div><div class="config-desc">Thử lại tối đa 3 lần nếu request thất bại</div></div><label class="toggle"><input type="checkbox" id="cfg-retry" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-<div class="config-row"><div><div class="config-label">Lưu lịch sử vào localStorage</div><div class="config-desc">Giữ lịch sử giữa các phiên</div></div><label class="toggle"><input type="checkbox" id="cfg-savelog" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-<div class="config-row"><div><div class="config-label">Bỏ qua duplicate URLs</div><div class="config-desc">Không thêm lại property đã tồn tại</div></div><label class="toggle"><input type="checkbox" id="cfg-dedup" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+<div class="config-row"><div><div class="config-label">Delay giữa requests</div><div class="config-desc">Tránh rate limit GSC API (~200 req/100s)</div></div><div style="display:flex;align-items:center;gap:10px"><input type="text" id="cfg-delay" value="500" style="width:70px;text-align:center"><span style="font-size:12px;color:var(--muted)">ms</span></div></div>
+<div class="config-row"><div><div class="config-label">Auto retry khi lỗi</div><div class="config-desc">Thử lại tối đa 3 lần</div></div><label class="toggle"><input type="checkbox" id="cfg-retry" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+<div class="config-row"><div><div class="config-label">Lưu log vào localStorage</div><div class="config-desc">Giữ lịch sử giữa các phiên</div></div><label class="toggle"><input type="checkbox" id="cfg-savelog" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+<div class="config-row"><div><div class="config-label">Bỏ qua duplicate URLs</div><div class="config-desc">Không thêm lại property đã tồn tại</div></div><label class="toggle"><input type="checkbox" id="cfg-dedup" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
 </div>
-<div class="btn-row"><button class="btn btn-primary" onclick="saveConfig();toast('Đã lưu cấu hình','ok')">Lưu cấu hình</button><button class="btn btn-ghost" onclick="resetConfig()">Reset mặc định</button></div>
+<div class="btn-row"><button class="btn btn-primary" id="save-config-btn">Lưu cấu hình</button><button class="btn btn-ghost" id="reset-config-btn">Reset mặc định</button></div>
 </div>
 </div>
 <div class="panel" id="panel-guide">
-<div class="page-header"><div class="page-title">Hướng dẫn cài đặt</div><div class="page-sub">Cách cấu hình Google OAuth để sử dụng tool</div></div>
+<div class="page-header"><div class="page-title">Hướng dẫn cài đặt</div><div class="page-sub">Cách cấu hình Google OAuth để dùng tool</div></div>
 <div class="card">
-<div class="config-title" style="margin-bottom:16px">Bước 1 — Tạo Google OAuth Client ID</div>
+<div class="config-title" style="margin-bottom:16px">Bước 1 — Tạo OAuth Client ID</div>
 <div style="font-size:13px;line-height:2;color:var(--muted)">
 <span style="color:var(--text);font-weight:600">1.</span> Vào <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">Google Cloud Console</a> → tạo Project mới<br>
 <span style="color:var(--text);font-weight:600">2.</span> APIs &amp; Services → Enable APIs → bật <code style="color:var(--accent)">Google Search Console API</code><br>
 <span style="color:var(--text);font-weight:600">3.</span> Credentials → Create Credentials → OAuth 2.0 Client ID → Web application<br>
-<span style="color:var(--text);font-weight:600">4.</span> Authorized JavaScript origins: thêm URL GitHub Pages<br>
-<span style="color:var(--text);font-weight:600">5.</span> Authorized redirect URIs: thêm URL GitHub Pages<br>
-<span style="color:var(--text);font-weight:600">6.</span> Copy Client ID → paste vào tab <strong>Cấu hình</strong>
+<span style="color:var(--text);font-weight:600">4.</span> Authorized JavaScript origins + Redirect URIs: thêm URL GitHub Pages của bạn<br>
+<span style="color:var(--text);font-weight:600">5.</span> Copy Client ID → paste vào tab <strong>Cấu hình</strong>
 </div>
 </div>
 <div class="card">
 <div class="config-title" style="margin-bottom:16px">Bước 2 — OAuth Consent Screen</div>
 <div style="font-size:13px;line-height:2;color:var(--muted)">
 <span style="color:var(--text);font-weight:600">1.</span> APIs &amp; Services → OAuth consent screen → External → Create<br>
-<span style="color:var(--text);font-weight:600">2.</span> Điền tên app, email → Next<br>
-<span style="color:var(--text);font-weight:600">3.</span> Scopes → Add scope → tìm <code style="color:var(--accent)">webmasters</code> → thêm cả 2 scope<br>
-<span style="color:var(--text);font-weight:600">4.</span> Test users → thêm email Google của bạn (chế độ Testing)<br>
-<span style="color:var(--text);font-weight:600">5.</span> Quay lại tool → đăng nhập → dùng được!
+<span style="color:var(--text);font-weight:600">2.</span> Scopes → Add scope → tìm <code style="color:var(--accent)">webmasters</code> → thêm cả 2 scope<br>
+<span style="color:var(--text);font-weight:600">3.</span> Test users → thêm email Google của bạn → Save<br>
+<span style="color:var(--text);font-weight:600">4.</span> Quay lại tool → Đăng nhập → dùng được!
 </div>
 </div>
 <div class="card">
 <div class="config-title" style="margin-bottom:12px">GSC API Endpoints</div>
-<div class="code-block" style="color:var(--accent)"><span style="color:var(--muted)">// Thêm property mới</span>
-<span style="color:var(--amber)">PUT</span> <span style="color:var(--green)">https://www.googleapis.com/webmasters/v3/sites/{siteUrl}</span>
+<div class="code-block"><span class="comment">// Thêm property mới</span>
+<span class="key">PUT</span> <span class="val">https://www.googleapis.com/webmasters/v3/sites/{siteUrl}</span>
 
-<span style="color:var(--muted)">// Danh sách properties hiện có</span>
-<span style="color:var(--amber)">GET</span> <span style="color:var(--green)">https://www.googleapis.com/webmasters/v3/sites</span></div>
-<div style="font-size:12px;color:var(--muted);margin-top:8px">Rate limit: ~200 requests / 100 giây. Tool tự động thêm delay để tránh lỗi 429.</div>
+<span class="comment">// Danh sách properties</span>
+<span class="key">GET</span> <span class="val">https://www.googleapis.com/webmasters/v3/sites</span></div>
+<div style="font-size:12px;color:var(--muted);margin-top:8px">Rate limit: ~200 req/100s. Tool tự thêm delay tránh lỗi 429.</div>
 </div>
 </div>
 </main>
 </div>
 <div class="toast-wrap" id="toast-wrap"></div>
 <script>
+// State
 let isAuth=false,sites=[],isRunning=false,stopFlag=false,curMethod='dns',history_=[],config={clientId:'',delay:500,retry:true,saveLog:true,dedup:true};
 
-// FIX: showPanel nhận el trực tiếp thay vì dùng event.currentTarget
-function showPanel(id, el) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (el) el.classList.add('active');
-}
-
-window.onload = () => {
-  loadConfig();
-  loadHistory();
-  document.getElementById('redir-uri').textContent = location.origin + location.pathname;
+// Init
+document.addEventListener('DOMContentLoaded',()=>{
+  loadConfig();loadHistory();
+  document.getElementById('redir-uri').textContent=location.origin+location.pathname;
   checkHash();
-};
+  bindEvents();
+});
 
-function signIn() {
-  const cid = document.getElementById('cfg-cid').value.trim() || config.clientId;
-  if (!cid) { toast('Cần nhập Client ID ở tab Cấu hình!', 'err'); showPanel('config', document.getElementById('nav-config')); return; }
-  const scope = 'https://www.googleapis.com/auth/webmasters https://www.googleapis.com/auth/webmasters.readonly';
-  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' + cid + '&redirect_uri=' + encodeURIComponent(location.origin + location.pathname) + '&response_type=token&scope=' + encodeURIComponent(scope) + '&prompt=consent';
-}
-
-function checkHash() {
-  const h = location.hash;
-  if (h.includes('access_token')) {
-    const t = new URLSearchParams(h.slice(1)).get('access_token');
-    if (t) { sessionStorage.setItem('gsc_token', t); history.replaceState(null, '', location.pathname); fetchUser(t); }
-  } else {
-    const t = sessionStorage.getItem('gsc_token');
-    if (t) fetchUser(t);
-  }
-}
-
-function fetchUser(t) {
-  fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + t } })
-    .then(r => r.json())
-    .then(u => {
-      isAuth = true;
-      document.getElementById('auth-out').style.display = 'none';
-      document.getElementById('auth-in').style.display = 'block';
-      document.getElementById('auth-nm').textContent = u.name || 'User';
-      document.getElementById('auth-em').textContent = u.email || '';
-      document.getElementById('auth-av').textContent = (u.name || 'U')[0].toUpperCase();
-      log('Đã đăng nhập: ' + u.email, 'ok');
-      toast('Đăng nhập thành công!', 'ok');
-    }).catch(() => sessionStorage.removeItem('gsc_token'));
-}
-
-function signOut() {
-  sessionStorage.removeItem('gsc_token');
-  isAuth = false;
-  document.getElementById('auth-out').style.display = 'block';
-  document.getElementById('auth-in').style.display = 'none';
-  toast('Đã đăng xuất', 'info');
-}
-
-function getToken() { return sessionStorage.getItem('gsc_token'); }
-
-function onUrlInput() {
-  const lines = document.getElementById('url-input').value.split('\n').map(l => l.trim()).filter(Boolean);
-  const d = lines.filter(l => l.startsWith('sc-domain:')).length;
-  const u = lines.filter(l => l.startsWith('http')).length;
-  document.getElementById('url-hint').textContent = lines.length + ' URLs · ' + d + ' domain · ' + u + ' URL prefix';
-  document.getElementById('st-total').textContent = lines.length;
-  document.getElementById('parse-btn').disabled = !lines.length;
-  document.getElementById('nav-count').textContent = lines.length;
-}
-
-function loadDemo() {
-  document.getElementById('url-input').value = 'https://example.com\nhttps://blog.mysite.vn\nsc-domain:mystore.com\nhttps://shop.example.net';
-  onUrlInput();
-}
-
-function clearAll() {
-  document.getElementById('url-input').value = '';
-  onUrlInput();
-  document.getElementById('sites-card').style.display = 'none';
-  document.getElementById('log-card').style.display = 'none';
-  sites = [];
-  updateStats();
-}
-
-function selMethod(el, m) {
-  curMethod = m;
-  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  ['dns','html','meta','ga','gtm'].forEach(k => document.getElementById('m-' + k).style.display = k === m ? '' : 'none');
-}
-
-function parseAndShow() {
-  if (!isAuth) { toast('Cần đăng nhập Google trước!', 'err'); return; }
-  const lines = document.getElementById('url-input').value.split('\n').map(l => l.trim()).filter(Boolean);
-  const seen = new Set();
-  sites = [];
-  lines.forEach(url => {
-    if (config.dedup && seen.has(url)) return;
-    seen.add(url);
-    sites.push({ url, type: url.startsWith('sc-domain:') ? 'domain' : 'url', status: 'pending', msg: '' });
+function bindEvents(){
+  // Nav items
+  document.querySelectorAll('.nav-item[data-panel]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const panel=this.dataset.panel;
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+panel).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+      this.classList.add('active');
+    });
   });
-  renderSites();
-  document.getElementById('sites-card').style.display = 'block';
-  document.getElementById('log-card').style.display = 'block';
-  updateStats();
-  log('Đã phân tích ' + sites.length + ' URLs (' + sites.filter(s => s.type === 'domain').length + ' domain, ' + sites.filter(s => s.type === 'url').length + ' URL prefix)', 'info');
+  // Method tabs
+  document.querySelectorAll('.mtab[data-method]').forEach(tab=>{
+    tab.addEventListener('click',function(){
+      curMethod=this.dataset.method;
+      document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active');
+      ['dns','html','meta','ga','gtm'].forEach(k=>document.getElementById('m-'+k).style.display=k===curMethod?'':'none');
+    });
+  });
+  // Buttons
+  document.getElementById('sign-in-btn').addEventListener('click',signIn);
+  document.getElementById('sign-out-btn').addEventListener('click',signOut);
+  document.getElementById('demo-btn').addEventListener('click',loadDemo);
+  document.getElementById('clear-btn').addEventListener('click',clearAll);
+  document.getElementById('parse-btn').addEventListener('click',parseAndShow);
+  document.getElementById('start-btn').addEventListener('click',startProcess);
+  document.getElementById('stop-btn').addEventListener('click',()=>{stopFlag=true;});
+  document.getElementById('clear-log-btn').addEventListener('click',()=>{document.getElementById('log-box').innerHTML='';});
+  document.getElementById('export-btn').addEventListener('click',exportCSV);
+  document.getElementById('copy-btn').addEventListener('click',copyResults);
+  document.getElementById('clear-history-btn').addEventListener('click',clearHistory);
+  document.getElementById('save-config-btn').addEventListener('click',()=>{saveConfig();toast('Đã lưu cấu hình','ok');});
+  document.getElementById('reset-config-btn').addEventListener('click',resetConfig);
+  document.getElementById('redir-uri').addEventListener('click',()=>{navigator.clipboard.writeText(location.origin+location.pathname).then(()=>toast('Đã copy redirect URI','ok'));});
+  document.getElementById('url-input').addEventListener('input',onUrlInput);
+  document.getElementById('cfg-cid').addEventListener('input',saveConfig);
+  document.getElementById('cfg-delay').addEventListener('input',saveConfig);
+  document.getElementById('cfg-retry').addEventListener('change',saveConfig);
+  document.getElementById('cfg-savelog').addEventListener('change',saveConfig);
+  document.getElementById('cfg-dedup').addEventListener('change',saveConfig);
 }
 
-function renderSites() {
-  document.getElementById('sites-tbody').innerHTML = sites.map((s, i) =>
-    '<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">' + String(i+1).padStart(2,'0') + '</td>' +
-    '<td class="site-url-cell" title="' + s.url + '">' + s.url + '</td>' +
-    '<td><span class="site-type ' + (s.type==='domain'?'type-domain':'type-url') + '">' + (s.type==='domain'?'sc-domain':'url-prefix') + '</span></td>' +
-    '<td><span class="status-badge s-' + s.status + '" id="sb-' + i + '"><span class="dot' + (s.status==='running'?' pulse':'') + '"></span>' + statusLabel(s.status) + '</span></td>' +
-    '<td style="font-size:11px;color:var(--muted);font-family:var(--mono)" id="msg-' + i + '">' + s.msg + '</td></tr>'
+// Auth
+function signIn(){
+  const cid=document.getElementById('cfg-cid').value.trim()||config.clientId;
+  if(!cid){
+    toast('Cần nhập Client ID ở tab Cấu hình','err');
+    document.querySelectorAll('.nav-item[data-panel]').forEach(b=>{if(b.dataset.panel==='config'){b.click();}});
+    return;
+  }
+  const scope='https://www.googleapis.com/auth/webmasters https://www.googleapis.com/auth/webmasters.readonly';
+  window.location.href=`https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${encodeURIComponent(location.origin+location.pathname)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=consent`;
+}
+function checkHash(){
+  const h=location.hash;
+  if(h.includes('access_token')){
+    const t=new URLSearchParams(h.slice(1)).get('access_token');
+    if(t){sessionStorage.setItem('gsc_token',t);history.replaceState(null,'',location.pathname);fetchUser(t);}
+  }else{const t=sessionStorage.getItem('gsc_token');if(t)fetchUser(t);}
+}
+function fetchUser(t){
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+t}})
+    .then(r=>r.json()).then(u=>{
+      isAuth=true;
+      document.getElementById('auth-out').style.display='none';
+      document.getElementById('auth-in').style.display='block';
+      document.getElementById('auth-nm').textContent=u.name||'User';
+      document.getElementById('auth-em').textContent=u.email||'';
+      document.getElementById('auth-av').textContent=(u.name||'U')[0].toUpperCase();
+      log('Đã đăng nhập: '+u.email,'ok');toast('Đăng nhập thành công!','ok');
+    }).catch(()=>sessionStorage.removeItem('gsc_token'));
+}
+function signOut(){sessionStorage.removeItem('gsc_token');isAuth=false;document.getElementById('auth-out').style.display='block';document.getElementById('auth-in').style.display='none';toast('Đã đăng xuất','info');}
+function getToken(){return sessionStorage.getItem('gsc_token');}
+
+// URL Input
+function onUrlInput(){
+  const lines=document.getElementById('url-input').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  const d=lines.filter(l=>l.startsWith('sc-domain:')).length;
+  const u=lines.filter(l=>l.startsWith('http')).length;
+  document.getElementById('url-hint').textContent=`${lines.length} URLs · ${d} domain · ${u} URL prefix`;
+  document.getElementById('st-total').textContent=lines.length;
+  document.getElementById('parse-btn').disabled=!lines.length;
+  document.getElementById('nav-count').textContent=lines.length;
+}
+function loadDemo(){document.getElementById('url-input').value='https://example.com\nhttps://blog.mysite.vn\nsc-domain:mystore.com\nhttps://shop.example.net';onUrlInput();}
+function clearAll(){document.getElementById('url-input').value='';onUrlInput();document.getElementById('sites-card').style.display='none';document.getElementById('log-card').style.display='none';sites=[];updateStats();}
+function parseAndShow(){
+  if(!isAuth){toast('Cần đăng nhập Google trước!','err');return;}
+  const lines=document.getElementById('url-input').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  const seen=new Set();sites=[];
+  lines.forEach(url=>{if(config.dedup&&seen.has(url))return;seen.add(url);sites.push({url,type:url.startsWith('sc-domain:')?'domain':'url',status:'pending',msg:''});});
+  renderSites();
+  document.getElementById('sites-card').style.display='block';
+  document.getElementById('log-card').style.display='block';
+  updateStats();log('Đã phân tích '+sites.length+' URLs','info');
+}
+function renderSites(){
+  document.getElementById('sites-tbody').innerHTML=sites.map((s,i)=>
+    `<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">${String(i+1).padStart(2,'0')}</td>
+    <td class="site-url-cell" title="${s.url}">${s.url}</td>
+    <td><span class="site-type ${s.type==='domain'?'type-domain':'type-url'}">${s.type==='domain'?'sc-domain':'url-prefix'}</span></td>
+    <td><span class="status-badge s-${s.status}" id="sb-${i}"><span class="dot${s.status==='running'?' pulse':''}"></span>${statusLabel(s.status)}</span></td>
+    <td style="font-size:11px;color:var(--muted);font-family:var(--mono)" id="msg-${i}">${s.msg}</td></tr>`
   ).join('');
 }
-
-function statusLabel(s) { return {pending:'Chờ',running:'Đang xử lý',ok:'Thành công',error:'Thất bại',skip:'Bỏ qua'}[s] || s; }
-
-function updateSiteRow(i) {
-  const s = sites[i];
-  const sb = document.getElementById('sb-' + i);
-  if (sb) { sb.className = 'status-badge s-' + s.status; sb.innerHTML = '<span class="dot' + (s.status==='running'?' pulse':'') + '"></span>' + statusLabel(s.status); }
-  const mg = document.getElementById('msg-' + i);
-  if (mg) mg.textContent = s.msg;
+function statusLabel(s){return{pending:'Chờ',running:'Đang xử lý',ok:'Thành công',error:'Thất bại',skip:'Bỏ qua'}[s]||s;}
+function updateSiteRow(i){
+  const s=sites[i];
+  const sb=document.getElementById('sb-'+i);
+  if(sb){sb.className='status-badge s-'+s.status;sb.innerHTML=`<span class="dot${s.status==='running'?' pulse':''}"></span>${statusLabel(s.status)}`;}
+  const mg=document.getElementById('msg-'+i);if(mg)mg.textContent=s.msg;
 }
 
-async function startProcess() {
-  if (!isAuth) { toast('Cần đăng nhập!', 'err'); return; }
-  if (!sites.length) { toast('Chưa có websites!', 'err'); return; }
-  isRunning = true; stopFlag = false;
-  document.getElementById('start-btn').style.display = 'none';
-  document.getElementById('stop-btn').style.display = '';
-  document.getElementById('progress-wrap').style.display = 'block';
-  sites.forEach(s => { s.status = 'pending'; s.msg = ''; });
-  renderSites();
-  let ok = 0, err = 0, skip = 0;
-  const token = getToken();
-  for (let i = 0; i < sites.length; i++) {
-    if (stopFlag) { log('Dừng theo yêu cầu.', 'warn'); break; }
-    const s = sites[i];
-    s.status = 'running'; updateSiteRow(i); updateProg(i, sites.length);
-    log('→ Đang xử lý: ' + s.url, 'info');
-    try {
-      const r = await addProp(s.url, token);
-      if (r.skipped) { s.status = 'skip'; s.msg = 'Đã tồn tại'; skip++; log('↷ ' + s.url + ' — Đã có property', 'warn'); }
-      else { s.status = 'ok'; s.msg = r.msg || 'Thành công'; ok++; log('✓ ' + s.url, 'ok'); }
-    } catch(e) {
-      s.status = 'error'; s.msg = e.message || 'Lỗi'; err++;
-      log('✗ ' + s.url + ' — ' + s.msg, 'err');
-      if (config.retry && !e.fatal) {
-        log('  Đang retry...', 'warn');
-        await sleep(1000);
-        try { const r2 = await addProp(s.url, token); s.status = 'ok'; s.msg = r2.msg + ' (retry)'; err--; ok++; log('✓ Retry thành công: ' + s.url, 'ok'); }
-        catch(e2) { s.msg = e2.message; }
+// Process
+async function startProcess(){
+  if(!isAuth){toast('Cần đăng nhập!','err');return;}
+  if(!sites.length){toast('Chưa có websites!','err');return;}
+  isRunning=true;stopFlag=false;
+  document.getElementById('start-btn').style.display='none';
+  document.getElementById('stop-btn').style.display='';
+  document.getElementById('progress-wrap').style.display='block';
+  sites.forEach(s=>{s.status='pending';s.msg='';});renderSites();
+  let ok=0,err=0,skip=0;const token=getToken();
+  for(let i=0;i<sites.length;i++){
+    if(stopFlag){log('Dừng theo yêu cầu.','warn');break;}
+    const s=sites[i];s.status='running';updateSiteRow(i);updateProg(i,sites.length);log('→ Đang xử lý: '+s.url,'info');
+    try{
+      const r=await addProp(s.url,token);
+      if(r.skipped){s.status='skip';s.msg='Đã tồn tại';skip++;log('↷ '+s.url+' — đã có property','warn');}
+      else{s.status='ok';s.msg=r.msg||'Thành công';ok++;log('✓ '+s.url,'ok');}
+    }catch(e){
+      s.status='error';s.msg=e.message||'Lỗi';err++;log('✗ '+s.url+' — '+s.msg,'err');
+      if(config.retry&&!e.fatal){
+        log('  Đang retry...','warn');await sleep(1000);
+        try{const r2=await addProp(s.url,token);s.status='ok';s.msg=r2.msg+' (retry)';err--;ok++;log('✓ Retry thành công: '+s.url,'ok');}
+        catch(e2){s.msg=e2.message;}
       }
     }
-    updateSiteRow(i); updateStatsFull(ok, err, skip, sites.length);
-    await sleep(config.delay);
+    updateSiteRow(i);updateStatsFull(ok,err,skip,sites.length);await sleep(config.delay);
   }
-  updateProg(sites.length, sites.length);
-  document.getElementById('prog-label').textContent = 'Hoàn thành: ' + ok + ' OK · ' + err + ' lỗi · ' + skip + ' bỏ qua';
-  document.getElementById('start-btn').style.display = '';
-  document.getElementById('start-btn').textContent = '↺ Chạy lại';
-  document.getElementById('stop-btn').style.display = 'none';
-  isRunning = false;
-  toast('Xong! ' + ok + ' thành công, ' + err + ' thất bại', ok > 0 ? 'ok' : 'err');
-  saveHistory(ok, err, skip); renderResults();
-  document.getElementById('nav-ok-count').textContent = ok;
-  log('─── Hoàn tất | OK: ' + ok + ' | Lỗi: ' + err + ' | Bỏ qua: ' + skip + ' ───', 'ok');
+  updateProg(sites.length,sites.length);
+  document.getElementById('prog-label').textContent=`Hoàn thành: ${ok} OK · ${err} lỗi · ${skip} skip`;
+  document.getElementById('start-btn').style.display='';document.getElementById('start-btn').textContent='↺ Chạy lại';
+  document.getElementById('stop-btn').style.display='none';isRunning=false;
+  toast(`Xong! ${ok} thành công, ${err} thất bại`,ok>0?'ok':'err');
+  saveHistory(ok,err,skip);renderResults();document.getElementById('nav-ok-count').textContent=ok;
+  log(`─── OK: ${ok} | Lỗi: ${err} | Skip: ${skip} ───`,'ok');
 }
-
-async function addProp(siteUrl, token) {
-  if (!token) throw { message: 'Chưa có access token', fatal: true };
-  const res = await fetch('https://www.googleapis.com/webmasters/v3/sites/' + encodeURIComponent(siteUrl), { method: 'PUT', headers: { Authorization: 'Bearer ' + token } });
-  if (res.status === 204 || res.status === 200) return { msg: 'Đã thêm vào GSC' };
-  if (res.status === 409) return { skipped: true };
-  if (res.status === 401) throw { message: 'Token hết hạn (401)', fatal: true };
-  if (res.status === 403) throw { message: 'Không có quyền (403)', fatal: false };
-  if (res.status === 429) throw { message: 'Rate limit (429) — thử lại', fatal: false };
-  const b = await res.json().catch(() => ({}));
-  throw { message: 'HTTP ' + res.status + ': ' + (b?.error?.message || 'Lỗi API'), fatal: false };
+async function addProp(siteUrl,token){
+  if(!token)throw{message:'Chưa có access token',fatal:true};
+  const res=await fetch(`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}`,{method:'PUT',headers:{Authorization:'Bearer '+token}});
+  if(res.status===204||res.status===200)return{msg:'Đã thêm vào GSC'};
+  if(res.status===409)return{skipped:true};
+  if(res.status===401)throw{message:'Token hết hạn (401)',fatal:true};
+  if(res.status===403)throw{message:'Không có quyền (403)',fatal:false};
+  if(res.status===429)throw{message:'Rate limit (429) — thử lại',fatal:false};
+  const b=await res.json().catch(()=>({}));
+  throw{message:`HTTP ${res.status}: ${b?.error?.message||'Lỗi API'}`,fatal:false};
 }
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function updateProg(done,total){const pct=total?Math.round(done/total*100):0;document.getElementById('prog-fill').style.width=pct+'%';document.getElementById('prog-label').textContent=`${done}/${total} (${pct}%)`;}
+function updateStatsFull(ok,err,skip,total){document.getElementById('st-total').textContent=total;document.getElementById('st-ok').textContent=ok;document.getElementById('st-err').textContent=err;document.getElementById('st-pct').textContent=total?Math.round((ok+skip)/total*100)+'%':'–';}
+function updateStats(){document.getElementById('st-total').textContent=sites.length;document.getElementById('st-ok').textContent=0;document.getElementById('st-err').textContent=0;document.getElementById('st-pct').textContent='–';}
+function log(msg,type){const box=document.getElementById('log-box');const now=new Date().toLocaleTimeString('vi-VN');const el=document.createElement('div');el.className='log-line'+(type?' log-'+type:'');el.textContent=`[${now}] ${msg}`;box.appendChild(el);box.scrollTop=box.scrollHeight;}
 
-function stopProcess() { stopFlag = true; }
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function updateProg(done, total) {
-  const pct = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('prog-label').textContent = 'Đang xử lý ' + done + '/' + total + ' (' + pct + '%)';
+// Results
+function renderResults(){
+  const el=document.getElementById('results-content');
+  if(!sites.length){el.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có dữ liệu.</div></div>';return;}
+  el.innerHTML=`<div style="overflow-x:auto"><table class="sites-table"><thead><tr><th>#</th><th>Website</th><th>Loại</th><th>Kết quả</th><th>Ghi chú</th></tr></thead><tbody>${sites.map((s,i)=>`<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">${i+1}</td><td class="site-url-cell">${s.url}</td><td><span class="site-type ${s.type==='domain'?'type-domain':'type-url'}">${s.type}</span></td><td><span class="status-badge s-${s.status}">${statusLabel(s.status)}</span></td><td style="font-size:11px;color:var(--muted)">${s.msg}</td></tr>`).join('')}</tbody></table></div>`;
 }
+function exportCSV(){if(!sites.length){toast('Không có dữ liệu','err');return;}const rows=[['#','URL','Type','Status','Note'],...sites.map((s,i)=>[i+1,s.url,s.type,s.status,s.msg])];const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='gsc-results-'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('Đã export CSV','ok');}
+function copyResults(){navigator.clipboard.writeText(sites.map(s=>`${s.url}\t${s.status}\t${s.msg}`).join('\n')).then(()=>toast('Đã copy','ok'));}
 
-function updateStatsFull(ok, err, skip, total) {
-  document.getElementById('st-total').textContent = total;
-  document.getElementById('st-ok').textContent = ok;
-  document.getElementById('st-err').textContent = err;
-  document.getElementById('st-pct').textContent = total ? Math.round((ok + skip) / total * 100) + '%' : '–';
-}
+// History
+function saveHistory(ok,err,skip){const e={date:new Date().toISOString(),total:sites.length,ok,err,skip,method:curMethod};history_.unshift(e);if(history_.length>50)history_.pop();if(config.saveLog)localStorage.setItem('gsc_history',JSON.stringify(history_));renderHistory();}
+function loadHistory(){try{history_=JSON.parse(localStorage.getItem('gsc_history')||'[]');}catch{history_=[];}renderHistory();}
+function renderHistory(){const el=document.getElementById('history-list');if(!history_.length){el.innerHTML='<div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div>';return;}el.innerHTML=history_.map(h=>`<div class="history-row"><div style="flex:1"><div style="font-size:13px;font-weight:500">${new Date(h.date).toLocaleString('vi-VN')}</div><div class="history-meta">${h.total} sites · ${h.method}</div></div><div style="display:flex;gap:8px"><span class="status-badge s-ok"><span class="dot"></span>${h.ok} OK</span>${h.err?`<span class="status-badge s-error"><span class="dot"></span>${h.err} lỗi</span>`:''}${h.skip?`<span class="status-badge s-skip"><span class="dot"></span>${h.skip} skip</span>`:''}</div></div>`).join('');}
+function clearHistory(){history_=[];localStorage.removeItem('gsc_history');renderHistory();toast('Đã xoá lịch sử','info');}
 
-function updateStats() {
-  document.getElementById('st-total').textContent = sites.length;
-  document.getElementById('st-ok').textContent = 0;
-  document.getElementById('st-err').textContent = 0;
-  document.getElementById('st-pct').textContent = '–';
-}
+// Config
+function saveConfig(){config.clientId=document.getElementById('cfg-cid').value.trim();config.delay=parseInt(document.getElementById('cfg-delay').value)||500;config.retry=document.getElementById('cfg-retry').checked;config.saveLog=document.getElementById('cfg-savelog').checked;config.dedup=document.getElementById('cfg-dedup').checked;localStorage.setItem('gsc_config',JSON.stringify(config));}
+function loadConfig(){try{config={...config,...JSON.parse(localStorage.getItem('gsc_config')||'{}');}catch{}document.getElementById('cfg-cid').value=config.clientId||'';document.getElementById('cfg-delay').value=config.delay||500;document.getElementById('cfg-retry').checked=config.retry!==false;document.getElementById('cfg-savelog').checked=config.saveLog!==false;document.getElementById('cfg-dedup').checked=config.dedup!==false;}
+function resetConfig(){config={clientId:'',delay:500,retry:true,saveLog:true,dedup:true};loadConfig();localStorage.removeItem('gsc_config');toast('Đã reset cấu hình','info');}
 
-function log(msg, type) {
-  const box = document.getElementById('log-box');
-  const now = new Date().toLocaleTimeString('vi-VN');
-  const el = document.createElement('div');
-  el.className = 'log-line' + (type ? ' log-' + type : '');
-  el.textContent = '[' + now + '] ' + msg;
-  box.appendChild(el);
-  box.scrollTop = box.scrollHeight;
-}
-
-function clearLog() { document.getElementById('log-box').innerHTML = ''; }
-
-function renderResults() {
-  const el = document.getElementById('results-content');
-  if (!sites.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có dữ liệu.</div></div>'; return; }
-  el.innerHTML = '<div style="overflow-x:auto"><table class="sites-table"><thead><tr><th>#</th><th>Website</th><th>Loại</th><th>Kết quả</th><th>Ghi chú</th></tr></thead><tbody>' +
-    sites.map((s, i) => '<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">' + (i+1) + '</td><td class="site-url-cell">' + s.url + '</td><td><span class="site-type ' + (s.type==='domain'?'type-domain':'type-url') + '">' + s.type + '</span></td><td><span class="status-badge s-' + s.status + '">' + statusLabel(s.status) + '</span></td><td style="font-size:11px;color:var(--muted)">' + s.msg + '</td></tr>').join('') +
-    '</tbody></table></div>';
-}
-
-function exportCSV() {
-  if (!sites.length) { toast('Không có dữ liệu', 'err'); return; }
-  const rows = [['#','URL','Type','Status','Note'], ...sites.map((s,i) => [i+1,s.url,s.type,s.status,s.msg])];
-  const csv = rows.map(r => r.map(c => '"' + c + '"').join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-  a.download = 'gsc-results-' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  toast('Đã export CSV', 'ok');
-}
-
-function copyResults() {
-  navigator.clipboard.writeText(sites.map(s => s.url + '\t' + s.status + '\t' + s.msg).join('\n')).then(() => toast('Đã copy', 'ok'));
-}
-
-function saveHistory(ok, err, skip) {
-  const e = { date: new Date().toISOString(), total: sites.length, ok, err, skip, method: curMethod };
-  history_.unshift(e);
-  if (history_.length > 50) history_.pop();
-  if (config.saveLog) localStorage.setItem('gsc_history', JSON.stringify(history_));
-  renderHistory();
-}
-
-function loadHistory() {
-  try { history_ = JSON.parse(localStorage.getItem('gsc_history') || '[]'); } catch { history_ = []; }
-  renderHistory();
-}
-
-function renderHistory() {
-  const el = document.getElementById('history-list');
-  if (!history_.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div>'; return; }
-  el.innerHTML = history_.map(h =>
-    '<div class="history-row"><div style="flex:1"><div style="font-size:13px;font-weight:500">' + new Date(h.date).toLocaleString('vi-VN') + '</div><div class="history-meta">' + h.total + ' sites · ' + h.method + '</div></div>' +
-    '<div style="display:flex;gap:8px"><span class="status-badge s-ok"><span class="dot"></span>' + h.ok + ' OK</span>' +
-    (h.err ? '<span class="status-badge s-error"><span class="dot"></span>' + h.err + ' lỗi</span>' : '') +
-    (h.skip ? '<span class="status-badge s-skip"><span class="dot"></span>' + h.skip + ' skip</span>' : '') +
-    '</div></div>'
-  ).join('');
-}
-
-function clearHistory() { history_ = []; localStorage.removeItem('gsc_history'); renderHistory(); toast('Đã xoá lịch sử', 'info'); }
-
-function saveConfig() {
-  config.clientId = document.getElementById('cfg-cid').value.trim();
-  config.delay = parseInt(document.getElementById('cfg-delay').value) || 500;
-  config.retry = document.getElementById('cfg-retry').checked;
-  config.saveLog = document.getElementById('cfg-savelog').checked;
-  config.dedup = document.getElementById('cfg-dedup').checked;
-  localStorage.setItem('gsc_config', JSON.stringify(config));
-}
-
-function loadConfig() {
-  try { config = { ...config, ...JSON.parse(localStorage.getItem('gsc_config') || '{}') }; } catch {}
-  document.getElementById('cfg-cid').value = config.clientId || '';
-  document.getElementById('cfg-delay').value = config.delay || 500;
-  document.getElementById('cfg-retry').checked = config.retry !== false;
-  document.getElementById('cfg-savelog').checked = config.saveLog !== false;
-  document.getElementById('cfg-dedup').checked = config.dedup !== false;
-}
-
-function resetConfig() {
-  config = { clientId: '', delay: 500, retry: true, saveLog: true, dedup: true };
-  loadConfig(); localStorage.removeItem('gsc_config'); toast('Đã reset cấu hình', 'info');
-}
-
-function copyRedir() {
-  navigator.clipboard.writeText(location.origin + location.pathname).then(() => toast('Đã copy redirect URI', 'ok'));
-}
-
-function toast(msg, type) {
-  type = type || 'info';
-  const wrap = document.getElementById('toast-wrap');
-  const el = document.createElement('div');
-  el.className = 'toast toast-' + type;
-  el.innerHTML = '<span>' + ({ok:'✓',err:'✗',info:'ℹ'}[type]||'•') + '</span><span>' + msg + '</span>';
-  wrap.appendChild(el);
-  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3000);
-}
+// Toast
+function toast(msg,type='info'){const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className=`toast toast-${type}`;el.innerHTML=`<span>${{ok:'✓',err:'✗',info:'ℹ'}[type]||'•'}</span><span>${msg}</span>`;wrap.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300);},3000);}
 </script>
 </body>
 </html>
