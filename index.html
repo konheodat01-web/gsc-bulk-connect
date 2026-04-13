@@ -4,19 +4,288 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GSC Bulk Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-body{font-family:sans-serif;background:#0d0f14;color:#e8eaf0;margin:0;padding:20px}
-.msg{background:#13161e;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:30px;max-width:500px;margin:40px auto;text-align:center}
-h1{font-size:20px;margin:0 0 10px}
-p{color:#6b7280;font-size:14px}
-a{color:#4f8ef7}
+:root{--bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--bg4:#222636;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8eaf0;--muted:#6b7280;--accent:#4f8ef7;--accent2:#3d72d4;--green:#34d399;--green-bg:rgba(52,211,153,0.1);--red:#f87171;--red-bg:rgba(248,113,113,0.1);--amber:#fbbf24;--amber-bg:rgba(251,191,36,0.1);--blue-bg:rgba(79,142,247,0.1);--radius:10px;--font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{padding:32px;overflow-y:auto}
+.logo{padding:24px 20px;border-bottom:1px solid var(--border)}
+.logo-mark{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.15em;text-transform:uppercase}
+.logo-title{font-size:16px;font-weight:600;margin-top:4px}
+.logo-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.nav{padding:16px 12px;flex:1}
+.nav-label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:0 8px;margin-bottom:6px;margin-top:16px}
+.nav-label:first-child{margin-top:0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--blue-bg);color:var(--accent)}
+.nav-item .icon{width:18px;text-align:center;font-size:14px;flex-shrink:0}
+.nav-item .count{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--bg4);padding:1px 7px;border-radius:20px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+.auth-widget{background:var(--bg3);border-radius:var(--radius);padding:12px}
+.auth-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.auth-info{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.auth-name{font-size:13px;font-weight:500}
+.auth-email{font-size:11px;color:var(--muted)}
+.auth-btn{width:100%;padding:7px;border-radius:7px;border:1px solid var(--border2);background:var(--bg4);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500}
+.auth-btn:hover{border-color:var(--accent);color:var(--accent)}
+.auth-btn.connected{border-color:var(--green);color:var(--green)}
+.panel{display:none}
+.panel.active{display:block}
+.page-header{margin-bottom:28px}
+.page-title{font-size:22px;font-weight:600}
+.page-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.stat-val{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1}
+.stat-key{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+.stat.s-total .stat-val{color:var(--text)}
+.stat.s-ok .stat-val{color:var(--green)}
+.stat.s-err .stat-val{color:var(--red)}
+.stat.s-pct .stat-val{color:var(--accent)}
+textarea,input[type=text],select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:13px;padding:10px 12px;outline:none;transition:border .15s;resize:vertical}
+textarea:focus,input:focus,select:focus{border-color:var(--accent)}
+select{font-family:var(--font);cursor:pointer}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:500}
+.field{margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:var(--font)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-ghost{background:var(--bg3);color:var(--muted);border:1px solid var(--border2)}
+.btn-ghost:hover{color:var(--text);background:var(--bg4)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-row{display:flex;gap:8px;align-items:center}
+.method-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.mtab{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border2);color:var(--muted);background:var(--bg3);transition:all .15s}
+.mtab.active{background:var(--blue-bg);color:var(--accent);border-color:rgba(79,142,247,.3)}
+.progress-wrap{margin:12px 0}
+.progress-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
+.progress-label{font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
+.sites-table{width:100%;border-collapse:collapse}
+.sites-table th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--border);text-align:left}
+.sites-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.sites-table tr:last-child td{border-bottom:none}
+.sites-table tbody tr:hover{background:var(--bg3)}
+.site-url-cell{font-family:var(--mono);font-size:12px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.site-type{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;font-family:var(--mono)}
+.type-domain{background:rgba(251,191,36,.12);color:var(--amber)}
+.type-url{background:var(--blue-bg);color:var(--accent)}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;font-family:var(--mono)}
+.s-pending{background:var(--bg4);color:var(--muted)}
+.s-running{background:var(--blue-bg);color:var(--accent)}
+.s-ok{background:var(--green-bg);color:var(--green)}
+.s-error{background:var(--red-bg);color:var(--red)}
+.s-skip{background:var(--amber-bg);color:var(--amber)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.dot.pulse{animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.log-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:12px;max-height:220px;overflow-y:auto;line-height:1.8}
+.log-line{color:var(--muted)}
+.log-ok{color:var(--green)}
+.log-err{color:var(--red)}
+.log-info{color:var(--accent)}
+.log-warn{color:var(--amber)}
+.config-section{margin-bottom:24px}
+.config-title{font-size:13px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.config-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.config-row:last-child{border-bottom:none}
+.config-label{font-size:13px}
+.config-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.toggle{position:relative;width:38px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--bg4);border-radius:11px;border:1px solid var(--border2);transition:all .2s;cursor:pointer}
+.toggle input:checked+.toggle-track{background:var(--accent);border-color:var(--accent)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;pointer-events:none}
+.toggle input:checked~.toggle-thumb{transform:translateX(16px)}
+.toast-wrap{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:999}
+.toast{padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;animation:slideIn .2s ease;border:1px solid}
+.toast-ok{background:var(--green-bg);color:var(--green);border-color:rgba(52,211,153,.3)}
+.toast-err{background:var(--red-bg);color:var(--red);border-color:rgba(248,113,113,.3)}
+.toast-info{background:var(--blue-bg);color:var(--accent);border-color:rgba(79,142,247,.3)}
+@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+.history-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.history-row:last-child{border-bottom:none}
+.history-meta{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.empty{text-align:center;padding:40px;color:var(--muted)}
+.empty-icon{font-size:32px;margin-bottom:10px}
+.empty-text{font-size:14px}
+.google-btn{width:100%;padding:10px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
+.google-btn:hover{border-color:var(--accent);background:var(--bg4)}
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12px;color:var(--accent);overflow-x:auto;margin:10px 0;line-height:1.7}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+@media(max-width:768px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:static}.stats-row{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="msg">
-<h1>⚡ GSC Bulk Connect</h1>
-<p>File đang được cập nhật...<br>Vui lòng chờ vài phút rồi refresh trang.</p>
-<p style="margin-top:20px"><a href="https://github.com/konheodat01-web/gsc-bulk-connect">GitHub Repo</a></p>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">GSC Tool</div>
+      <div class="logo-title">Bulk Connect</div>
+      <div class="logo-sub">Google Search Console</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Chính</div>
+      <button class="nav-item active" onclick="showPanel('connect',this)"><span class="icon">⚡</span>Kết nối hàng loạt<span class="count" id="nav-count">0</span></button>
+      <button class="nav-item" onclick="showPanel('results',this)"><span class="icon">📋</span>Kết quả<span class="count" id="nav-ok-count">0</span></button>
+      <button class="nav-item" onclick="showPanel('history',this)"><span class="icon">🕒</span>Lịch sử</button>
+      <div class="nav-label">Cài đặt</div>
+      <button class="nav-item" onclick="showPanel('config',this)"><span class="icon">⚙️</span>Cấu hình</button>
+      <button class="nav-item" onclick="showPanel('guide',this)"><span class="icon">📖</span>Hướng dẫn</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="auth-widget">
+        <div id="auth-out">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Đăng nhập để bắt đầu</div>
+          <button class="google-btn" onclick="signIn()">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Đăng nhập với Google
+          </button>
+        </div>
+        <div id="auth-in" style="display:none">
+          <div class="auth-info"><div class="auth-avatar" id="auth-av">U</div><div><div class="auth-name" id="auth-nm">User</div><div class="auth-email" id="auth-em">email</div></div></div>
+          <button class="auth-btn connected" onclick="signOut()">✓ Đã kết nối · Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="panel active" id="panel-connect">
+      <div class="page-header"><div class="page-title">Kết nối hàng loạt</div><div class="page-sub">Thêm nhiều website vào Google Search Console cùng lúc</div></div>
+      <div class="stats-row">
+        <div class="stat s-total"><div class="stat-val" id="st-total">0</div><div class="stat-key">Tổng</div></div>
+        <div class="stat s-ok"><div class="stat-val" id="st-ok">0</div><div class="stat-key">Thành công</div></div>
+        <div class="stat s-err"><div class="stat-val" id="st-err">0</div><div class="stat-key">Thất bại</div></div>
+        <div class="stat s-pct"><div class="stat-val" id="st-pct">–</div><div class="stat-key">Tỷ lệ</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Danh sách websites</span><div class="btn-row"><button class="btn btn-ghost" onclick="loadDemo()">Mẫu</button><button class="btn btn-ghost" onclick="clearAll()">Xoá</button></div></div>
+        <div class="field"><label>Mỗi URL một dòng — hỗ trợ https:// và sc-domain:</label><textarea id="url-input" rows="7" placeholder="https://example.com&#10;https://blog.mysite.vn&#10;sc-domain:mystore.com" oninput="onUrlInput()"></textarea></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted);font-family:var(--mono)" id="url-hint">0 URLs</span><button class="btn btn-primary" onclick="parseAndShow()" id="parse-btn" disabled>Phân tích →</button></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Phương thức xác minh</span></div>
+        <div class="method-tabs">
+          <div class="mtab active" onclick="selMethod(this,'dns')">DNS TXT Record</div>
+          <div class="mtab" onclick="selMethod(this,'html')">HTML File</div>
+          <div class="mtab" onclick="selMethod(this,'meta')">Meta Tag</div>
+          <div class="mtab" onclick="selMethod(this,'ga')">Google Analytics</div>
+          <div class="mtab" onclick="selMethod(this,'gtm')">Tag Manager</div>
+        </div>
+        <div id="m-dns"><div style="font-size:12px;color:var(--muted);line-height:1.7">Thêm TXT record vào DNS. Dùng với <span style="color:var(--amber)">sc-domain:</span> property.</div><div class="row2" style="margin-top:10px"><div class="field"><label>DNS Provider</label><input type="text" placeholder="Cloudflare, Namecheap..."></div><div class="field"><label>TTL</label><select><option>Auto</option><option>300s</option><option>3600s</option></select></div></div></div>
+        <div id="m-html" style="display:none"><div style="font-size:12px;color:var(--muted)">Upload file HTML xác minh vào thư mục gốc website.</div></div>
+        <div id="m-meta" style="display:none"><div style="font-size:12px;color:var(--muted)">Chèn meta tag vào &lt;head&gt; trang chủ.</div></div>
+        <div id="m-ga" style="display:none"><div style="font-size:12px;color:var(--muted)">Dùng Google Analytics đã liên kết cùng account.</div></div>
+        <div id="m-gtm" style="display:none"><div class="field"><label>GTM Container ID</label><input type="text" placeholder="GTM-XXXXXXX"></div></div>
+      </div>
+      <div class="card" id="sites-card" style="display:none">
+        <div class="card-header"><span class="card-title">Danh sách xử lý</span><div class="btn-row"><button class="btn btn-danger" id="stop-btn" onclick="stopProcess()" style="display:none">⏹ Dừng</button><button class="btn btn-primary" id="start-btn" onclick="startProcess()">▶ Bắt đầu</button></div></div>
+        <div class="progress-wrap" id="prog-wrap" style="display:none"><div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div><div class="progress-label" id="prog-label">Chờ...</div></div>
+        <div style="overflow-x:auto"><table class="sites-table"><thead><tr><th>#</th><th>Website</th><th>Loại</th><th>Trạng thái</th><th>Ghi chú</th></tr></thead><tbody id="sites-tbody"></tbody></table></div>
+      </div>
+      <div class="card" id="log-card" style="display:none">
+        <div class="card-header"><span class="card-title">Activity Log</span><button class="btn btn-ghost" onclick="clearLog()" style="font-size:11px;padding:5px 12px">Xoá</button></div>
+        <div class="log-box" id="log-box"></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-results">
+      <div class="page-header"><div class="page-title">Kết quả</div><div class="page-sub">Chi tiết sau khi xử lý</div></div>
+      <div class="card"><div class="card-header"><span class="card-title">Báo cáo</span><div class="btn-row"><button class="btn btn-ghost" onclick="exportCSV()">↓ CSV</button><button class="btn btn-ghost" onclick="copyResults()">⎘ Copy</button></div></div><div id="results-content"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có kết quả.</div></div></div></div>
+    </div>
+    <div class="panel" id="panel-history">
+      <div class="page-header"><div class="page-title">Lịch sử</div></div>
+      <div class="card"><div class="card-header"><span class="card-title">Lịch sử chạy</span><button class="btn btn-ghost" onclick="clearHistory()">Xoá</button></div><div id="history-list"><div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div></div></div>
+    </div>
+    <div class="panel" id="panel-config">
+      <div class="page-header"><div class="page-title">Cấu hình</div></div>
+      <div class="card">
+        <div class="config-section"><div class="config-title">Google OAuth 2.0</div>
+          <div class="field"><label>Client ID (từ Google Cloud Console)</label><input type="text" id="cfg-cid" placeholder="xxxx.apps.googleusercontent.com" oninput="saveConfig()"></div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Xem tab <strong>Hướng dẫn</strong> để biết cách lấy Client ID</div>
+          <div class="field"><label>Redirect URI — thêm vào Google Cloud Console (click để copy)</label><div class="code-block" id="redir-box" style="cursor:pointer" onclick="copyRedir()">Loading...</div></div>
+        </div>
+        <div class="config-section"><div class="config-title">Hành vi</div>
+          <div class="config-row"><div><div class="config-label">Delay giữa requests</div><div class="config-desc">Tránh rate limit GSC API (~200 req/100s)</div></div><div style="display:flex;align-items:center;gap:8px"><input type="text" id="cfg-delay" value="500" style="width:70px;text-align:center" oninput="saveConfig()"><span style="font-size:12px;color:var(--muted)">ms</span></div></div>
+          <div class="config-row"><div><div class="config-label">Auto retry khi lỗi</div></div><label class="toggle"><input type="checkbox" id="cfg-retry" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="config-row"><div><div class="config-label">Lưu lịch sử</div></div><label class="toggle"><input type="checkbox" id="cfg-save" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="config-row"><div><div class="config-label">Bỏ qua duplicate URLs</div></div><label class="toggle"><input type="checkbox" id="cfg-dedup" checked onchange="saveConfig()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="saveConfig();toast('Đã lưu','ok')">Lưu</button><button class="btn btn-ghost" onclick="resetCfg()">Reset</button></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-guide">
+      <div class="page-header"><div class="page-title">Hướng dẫn cài đặt</div></div>
+      <div class="card"><div class="config-title" style="margin-bottom:16px">Bước 1 — Tạo OAuth Client ID</div>
+        <div style="font-size:13px;line-height:2;color:var(--muted)">
+          <b style="color:var(--text)">1.</b> Vào <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">Google Cloud Console</a> → tạo Project mới<br>
+          <b style="color:var(--text)">2.</b> APIs &amp; Services → Enable APIs → bật <code style="color:var(--accent)">Google Search Console API</code><br>
+          <b style="color:var(--text)">3.</b> Credentials → Create → OAuth 2.0 Client ID → Web application<br>
+          <b style="color:var(--text)">4.</b> Thêm URL này vào Authorized origins và Redirect URIs:<br>
+          <div class="code-block" id="guide-url" style="margin:8px 0">Loading...</div>
+          <b style="color:var(--text)">5.</b> Copy Client ID → paste vào tab Cấu hình<br>
+          <b style="color:var(--text)">6.</b> OAuth consent screen → External → thêm scope <code style="color:var(--accent)">webmasters</code> → thêm email test
+        </div>
+      </div>
+      <div class="card"><div class="config-title" style="margin-bottom:12px">GSC API endpoints</div>
+        <div class="code-block"><span style="color:var(--muted)">// Thêm property</span>
+PUT https://www.googleapis.com/webmasters/v3/sites/{siteUrl}
+<span style="color:var(--muted)">// Liệt kê properties</span>
+GET https://www.googleapis.com/webmasters/v3/sites</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px">Rate limit: ~200 req/100s. Tool tự thêm delay tránh lỗi 429.</div>
+      </div>
+    </div>
+  </main>
 </div>
+<div class="toast-wrap" id="toast-wrap"></div>
+<script>
+let isAuth=false,sites=[],isRunning=false,stopFlag=false,curMethod='dns',history_=[],cfg={clientId:'',delay:500,retry:true,saveLog:true,dedup:true};
+window.onload=()=>{loadCfg();loadHistory();const u=location.origin+location.pathname;document.getElementById('redir-box').textContent=u;document.getElementById('guide-url').textContent=u;checkHash();};
+function showPanel(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');}
+function signIn(){const cid=document.getElementById('cfg-cid').value.trim()||cfg.clientId;if(!cid){toast('Chưa có Client ID — vào Cấu hình','err');showPanel('config',document.querySelectorAll('.nav-item')[3]);return;}const scope='https://www.googleapis.com/auth/webmasters https://www.googleapis.com/auth/webmasters.readonly';const redirect=encodeURIComponent(location.origin+location.pathname);window.location.href='https://accounts.google.com/o/oauth2/v2/auth?client_id='+cid+'&redirect_uri='+redirect+'&response_type=token&scope='+encodeURIComponent(scope)+'&prompt=consent';}
+function checkHash(){const h=window.location.hash;if(h.includes('access_token')){const p=new URLSearchParams(h.slice(1));const t=p.get('access_token');if(t){sessionStorage.setItem('gsc_token',t);history.replaceState(null,'',location.pathname);fetchUser(t);}}else{const t=sessionStorage.getItem('gsc_token');if(t)fetchUser(t);}}
+function fetchUser(t){fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+t}}).then(r=>r.json()).then(u=>{isAuth=true;document.getElementById('auth-out').style.display='none';document.getElementById('auth-in').style.display='block';document.getElementById('auth-nm').textContent=u.name||'User';document.getElementById('auth-em').textContent=u.email||'';document.getElementById('auth-av').textContent=(u.name||'U')[0].toUpperCase();log('Đã đăng nhập: '+u.email,'ok');toast('Đăng nhập thành công!','ok');}).catch(()=>sessionStorage.removeItem('gsc_token'));}
+function signOut(){sessionStorage.removeItem('gsc_token');isAuth=false;document.getElementById('auth-out').style.display='block';document.getElementById('auth-in').style.display='none';toast('Đã đăng xuất','info');}
+function getToken(){return sessionStorage.getItem('gsc_token');}
+function onUrlInput(){const lines=document.getElementById('url-input').value.split('\n').map(l=>l.trim()).filter(Boolean);const d=lines.filter(l=>l.startsWith('sc-domain:')).length;const u=lines.filter(l=>l.startsWith('http')).length;document.getElementById('url-hint').textContent=lines.length+' URLs · '+d+' domain · '+u+' URL prefix';document.getElementById('st-total').textContent=lines.length;document.getElementById('parse-btn').disabled=!lines.length;document.getElementById('nav-count').textContent=lines.length;}
+function loadDemo(){document.getElementById('url-input').value='https://example.com\nhttps://blog.mysite.vn\nsc-domain:mystore.com\nhttps://shop.example.net';onUrlInput();}
+function clearAll(){document.getElementById('url-input').value='';onUrlInput();document.getElementById('sites-card').style.display='none';document.getElementById('log-card').style.display='none';sites=[];updStats();}
+function selMethod(el,m){curMethod=m;document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['dns','html','meta','ga','gtm'].forEach(k=>document.getElementById('m-'+k).style.display=k===m?'':'none');}
+function parseAndShow(){if(!isAuth){toast('Cần đăng nhập trước!','err');return;}const lines=document.getElementById('url-input').value.split('\n').map(l=>l.trim()).filter(Boolean);const seen=new Set();sites=[];lines.forEach(url=>{if(cfg.dedup&&seen.has(url))return;seen.add(url);sites.push({url,type:url.startsWith('sc-domain:')?'domain':'url',status:'pending',msg:''});});renderSites();document.getElementById('sites-card').style.display='block';document.getElementById('log-card').style.display='block';updStats();log('Đã phân tích '+sites.length+' URLs','info');}
+function renderSites(){document.getElementById('sites-tbody').innerHTML=sites.map((s,i)=>'<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">'+String(i+1).padStart(2,'0')+'</td><td class="site-url-cell" title="'+s.url+'">'+s.url+'</td><td><span class="site-type '+(s.type==='domain'?'type-domain':'type-url')+'">'+(s.type==='domain'?'sc-domain':'url-prefix')+'</span></td><td><span class="status-badge s-'+s.status+'" id="sb-'+i+'"><span class="dot'+(s.status==='running'?' pulse':'')+'" ></span>'+slabel(s.status)+'</span></td><td style="font-size:11px;color:var(--muted);font-family:var(--mono);max-width:180px" id="msg-'+i+'">'+s.msg+'</td></tr>').join('');}
+function slabel(s){return{pending:'Chờ',running:'Đang xử lý',ok:'Thành công',error:'Thất bại',skip:'Bỏ qua'}[s]||s;}
+function updRow(i){const s=sites[i];const sb=document.getElementById('sb-'+i);if(sb){sb.className='status-badge s-'+s.status;sb.innerHTML='<span class="dot'+(s.status==='running'?' pulse':'')+'" ></span>'+slabel(s.status);}const mg=document.getElementById('msg-'+i);if(mg)mg.textContent=s.msg;}
+async function startProcess(){if(!isAuth){toast('Cần đăng nhập!','err');return;}if(!sites.length){toast('Chưa có websites!','err');return;}isRunning=true;stopFlag=false;document.getElementById('start-btn').style.display='none';document.getElementById('stop-btn').style.display='';document.getElementById('prog-wrap').style.display='block';sites.forEach(s=>{s.status='pending';s.msg='';});renderSites();let ok=0,err=0,skip=0;const token=getToken();for(let i=0;i<sites.length;i++){if(stopFlag){log('Dừng theo yêu cầu.','warn');break;}const s=sites[i];s.status='running';updRow(i);updProg(i,sites.length);log('→ Xử lý: '+s.url,'info');try{const r=await addProp(s.url,token);if(r.skipped){s.status='skip';s.msg='Đã tồn tại';skip++;log('↷ '+s.url+' — đã có property','warn');}else{s.status='ok';s.msg=r.msg||'Thành công';ok++;log('✓ '+s.url+' — '+s.msg,'ok');}}catch(e){s.status='error';s.msg=e.message||'Lỗi';err++;log('✗ '+s.url+' — '+s.msg,'err');if(cfg.retry&&!e.fatal){log('  Retrying...','warn');await sleep(1000);try{const r2=await addProp(s.url,token);s.status='ok';s.msg=r2.msg+' (retry)';err--;ok++;log('✓ Retry thành công: '+s.url,'ok');}catch(e2){s.msg=e2.message;}}}updRow(i);updStatsFull(ok,err,skip,sites.length);await sleep(cfg.delay);}updProg(sites.length,sites.length);document.getElementById('prog-label').textContent='Hoàn thành: '+ok+' OK · '+err+' lỗi · '+skip+' skip';document.getElementById('start-btn').style.display='';document.getElementById('start-btn').textContent='↺ Chạy lại';document.getElementById('stop-btn').style.display='none';isRunning=false;toast('Xong! '+ok+' thành công, '+err+' thất bại',ok>0?'ok':'err');saveHistory(ok,err,skip);renderResults();document.getElementById('nav-ok-count').textContent=ok;log('─── Hoàn tất | OK: '+ok+' | Lỗi: '+err+' | Skip: '+skip+' ───','ok');}
+async function addProp(url,token){if(!token)throw{message:'Chưa có token',fatal:true};const res=await fetch('https://www.googleapis.com/webmasters/v3/sites/'+encodeURIComponent(url),{method:'PUT',headers:{Authorization:'Bearer '+token}});if(res.status===204||res.status===200)return{msg:'Đã thêm vào GSC'};if(res.status===409)return{skipped:true};if(res.status===401)throw{message:'Token hết hạn (401)',fatal:true};if(res.status===403)throw{message:'Không có quyền (403)',fatal:false};if(res.status===429)throw{message:'Rate limit (429)',fatal:false};const b=await res.json().catch(()=>({}));throw{message:'HTTP '+res.status+': '+(b?.error?.message||'Lỗi API'),fatal:false};}
+function stopProcess(){stopFlag=true;}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function updProg(done,total){const pct=total?Math.round(done/total*100):0;document.getElementById('prog-fill').style.width=pct+'%';document.getElementById('prog-label').textContent='Đang xử lý '+done+'/'+total+' ('+pct+'%)';}
+function updStatsFull(ok,err,skip,total){document.getElementById('st-total').textContent=total;document.getElementById('st-ok').textContent=ok;document.getElementById('st-err').textContent=err;document.getElementById('st-pct').textContent=total?Math.round((ok+skip)/total*100)+'%':'–';}
+function updStats(){document.getElementById('st-total').textContent=sites.length;document.getElementById('st-ok').textContent=0;document.getElementById('st-err').textContent=0;document.getElementById('st-pct').textContent='–';}
+function log(msg,type){const box=document.getElementById('log-box');const el=document.createElement('div');el.className='log-line'+(type?' log-'+type:'');el.textContent='['+new Date().toLocaleTimeString('vi-VN')+'] '+msg;box.appendChild(el);box.scrollTop=box.scrollHeight;}
+function clearLog(){document.getElementById('log-box').innerHTML='';}
+function renderResults(){const el=document.getElementById('results-content');if(!sites.length){el.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có dữ liệu.</div></div>';return;}el.innerHTML='<div style="overflow-x:auto"><table class="sites-table"><thead><tr><th>#</th><th>Website</th><th>Loại</th><th>Kết quả</th><th>Ghi chú</th></tr></thead><tbody>'+sites.map((s,i)=>'<tr><td style="color:var(--muted);font-family:var(--mono);font-size:11px">'+(i+1)+'</td><td class="site-url-cell">'+s.url+'</td><td><span class="site-type '+(s.type==='domain'?'type-domain':'type-url')+'">'+s.type+'</span></td><td><span class="status-badge s-'+s.status+'">'+slabel(s.status)+'</span></td><td style="font-size:11px;color:var(--muted)">'+s.msg+'</td></tr>').join('')+'</tbody></table></div>';}
+function exportCSV(){if(!sites.length){toast('Không có dữ liệu','err');return;}const csv=[['#','URL','Type','Status','Note'],...sites.map((s,i)=>[i+1,s.url,s.type,s.status,s.msg])].map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='gsc-results-'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('Đã export CSV','ok');}
+function copyResults(){navigator.clipboard.writeText(sites.map(s=>s.url+'\t'+s.status+'\t'+s.msg).join('\n')).then(()=>toast('Đã copy','ok'));}
+function saveHistory(ok,err,skip){const e={date:new Date().toISOString(),total:sites.length,ok,err,skip,method:curMethod};history_.unshift(e);if(history_.length>50)history_.pop();if(cfg.saveLog)localStorage.setItem('gsc_history',JSON.stringify(history_));renderHistory();}
+function loadHistory(){try{history_=JSON.parse(localStorage.getItem('gsc_history')||'[]');}catch{history_=[];}renderHistory();}
+function renderHistory(){const el=document.getElementById('history-list');if(!history_.length){el.innerHTML='<div class="empty"><div class="empty-icon">🕒</div><div class="empty-text">Chưa có lịch sử.</div></div>';return;}el.innerHTML=history_.map(h=>'<div class="history-row"><div style="flex:1"><div style="font-size:13px;font-weight:500">'+new Date(h.date).toLocaleString('vi-VN')+'</div><div class="history-meta">'+h.total+' sites · '+h.method+'</div></div><div style="display:flex;gap:8px"><span class="status-badge s-ok"><span class="dot"></span>'+h.ok+' OK</span>'+(h.err?'<span class="status-badge s-error"><span class="dot"></span>'+h.err+' lỗi</span>':'')+(h.skip?'<span class="status-badge s-skip"><span class="dot"></span>'+h.skip+' skip</span>':'')+'</div></div>').join('');}
+function clearHistory(){history_=[];localStorage.removeItem('gsc_history');renderHistory();toast('Đã xoá lịch sử','info');}
+function saveConfig(){cfg.clientId=document.getElementById('cfg-cid').value.trim();cfg.delay=parseInt(document.getElementById('cfg-delay').value)||500;cfg.retry=document.getElementById('cfg-retry').checked;cfg.saveLog=document.getElementById('cfg-save').checked;cfg.dedup=document.getElementById('cfg-dedup').checked;localStorage.setItem('gsc_cfg',JSON.stringify(cfg));}
+function loadCfg(){try{cfg={...cfg,...JSON.parse(localStorage.getItem('gsc_cfg')||'{}')};}catch{}document.getElementById('cfg-cid').value=cfg.clientId||'';document.getElementById('cfg-delay').value=cfg.delay||500;document.getElementById('cfg-retry').checked=cfg.retry!==false;document.getElementById('cfg-save').checked=cfg.saveLog!==false;document.getElementById('cfg-dedup').checked=cfg.dedup!==false;}
+function resetCfg(){cfg={clientId:'',delay:500,retry:true,saveLog:true,dedup:true};loadCfg();localStorage.removeItem('gsc_cfg');toast('Đã reset','info');}
+function copyRedir(){navigator.clipboard.writeText(location.origin+location.pathname).then(()=>toast('Đã copy redirect URI','ok'));}
+function toast(msg,type='info'){const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast toast-'+type;el.innerHTML='<span>'+{ok:'✓',err:'✗',info:'ℹ'}[type]+'</span><span>'+msg+'</span>';wrap.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300);},3000);}
+</script>
 </body>
 </html>
